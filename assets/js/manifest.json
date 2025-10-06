@@ -1,0 +1,21 @@
+{
+	"name": "BMW 330e M Sport Checklist",
+	"short_name": "BMW Checklist",
+	"description": "Ultimate checklist for BMW 330e M Sport packages and options",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#0066b3",
+	"icons": [
+		{
+			"src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDA2NmIzIi8+CjxwYXRoIGQ9Ik03NiA1NkgxMTZDMTIyLjYyNyA1NiAxMjggNjEuMzczMiAxMjggNjhWMTI0QzEyOCAxMzAuNjI3IDEyMi42MjcgMTM2IDExNiAxMzZINzZDNjkuMzczMiAxMzYgNjQgMTMwLjYyNyA2NCAxMjRWNjhDNjQgNjEuMzczMiA2OS4zNzMyIDU2IDc2IDU2WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTExNiA1Nkg3NkM2OS4zNzMyIDU2IDY0IDYxLjM3MzIgNjQgNjhWMTI0QzY0IDEzMC42MjcgNjkuMzczMiAxMzYgNzYgMTM2SDExNkMxMjIuNjI3IDEzNiAxMjggMTMwLjYyNyAxMjggMTI0VjY4QzEyOCA2MS4zNzMyIDEyMi42MjcgNTYgMTE2IDU2WiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+",
+			"sizes": "192x192",
+			"type": "image/svg+xml"
+		},
+		{
+			"src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMDA2NmIzIi8+CjxwYXRoIGQ9Ik0yMDIgMTQ4SDMwNEMzMjcuMTkgMTQ4IDM0NiAxNjYuODEgMzQ2IDE5MFYzMzBDMzQ2IDM1My4xOSAzMjcuMTkgMzcyIDMwNCAzNzJIMjAyQzE3OC44MSAzNzIgMTYwIDM1My4xOSAxNjAgMzMwVjE5MEMxNjAgMTY2LjgxIDE3OC44MSAxNDggMjAyIDE0OFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0zMDQgMTQ4SDIwMkMxNzguODEgMTQ4IDE2MCAxNjYuODEgMTYwIDE5MFYzMzBDMTYwIDM1My4xOSAxNzguODEgMzcyIDIwMiAzNzJIMzA0QzMyNy4xOSAzNzIgMzQ2IDM1My4xOSAzNDYgMzMwVjE5MEMzNDYgMTY2LjgxIDMyNy4xOSAxNDggMzA0IDE0OFoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMjAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4=",
+			"sizes": "512x512",
+			"type": "image/svg+xml"
+		}
+	]
+}

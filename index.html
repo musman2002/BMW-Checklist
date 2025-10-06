@@ -1,165 +1,341 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BMW 330e M Sport Package Checklist</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW 330e M Sport Ultimate Checklist</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="assets/js/manifest.json">
 </head>
 
 <body>
-    <header>
-        <h1>BMW 330e M Sport Package Checklist</h1>
-        <p>Use this checklist to verify packages and options before purchasing</p>
-    </header>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>BMW 330e M Sport Checklist</h1>
+                <p>Your ultimate guide to verifying packages and options</p>
+            </div>
+            <div class="header-actions">
+                <button id="exportBtn" class="btn-secondary">Export Data</button>
+                <button id="importBtn" class="btn-secondary">Import Data</button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+            </div>
+        </header>
 
-    <div class="car-info">
-        <h2>Car Information</h2>
-        <div class="form-group">
-            <label for="carName">Car Name/Nickname:</label>
-            <input type="text" id="carName" placeholder="e.g., Blue M Sport, Dealer Special">
+        <div class="car-info-section">
+            <h2>Car Information</h2>
+            <div class="car-info-form">
+                <div class="form-group">
+                    <label for="carName">Car Name/Nickname:</label>
+                    <input type="text" id="carName" placeholder="e.g., Blue M Sport, Dealer Special">
+                </div>
+                <div class="form-group">
+                    <label for="licensePlate">License Plate Number:</label>
+                    <input type="text" id="licensePlate" placeholder="e.g., ABC 123">
+                </div>
+                <div class="form-group">
+                    <label for="vinNumber">VIN Number:</label>
+                    <input type="text" id="vinNumber" placeholder="WBxxx...">
+                </div>
+                <div class="form-group">
+                    <label for="carNotes">Notes:</label>
+                    <textarea id="carNotes" placeholder="Add any additional notes about this car..."></textarea>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="licensePlate">License Plate Number:</label>
-            <input type="text" id="licensePlate" placeholder="e.g., ABC 123">
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="packages">Packages</button>
+            <button class="tab-button" data-tab="exterior">Exterior</button>
+            <button class="tab-button" data-tab="interior">Interior</button>
+            <button class="tab-button" data-tab="mechanical">Mechanical</button>
         </div>
-        <div class="form-group">
-            <label for="vinNumber">VIN Number (Optional):</label>
-            <input type="text" id="vinNumber" placeholder="WBxxx...">
+
+        <div class="tab-content active" id="packages-tab">
+            <div class="checklist-section">
+                <h3>Executive Package (ZPX)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="execAdaptiveLED" data-package="executive" data-importance="high">
+                        <label for="execAdaptiveLED">
+                            <span class="item-title">Adaptive Full LED Headlights with Cornering</span>
+                            <span class="item-notes">Look for blue-ish inner rings in headlights</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="execHarmanKardon" data-package="executive" data-importance="high">
+                        <label for="execHarmanKardon">
+                            <span class="item-title">Harman Kardon Surround Sound System</span>
+                            <span class="item-notes">Check for metallic speaker grilles with branding</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="execHeatedSteering" data-package="executive"
+                            data-importance="medium">
+                        <label for="execHeatedSteering">
+                            <span class="item-title">Heated Steering Wheel</span>
+                            <span class="item-notes">Look for heating button on lower steering wheel spoke</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="execWirelessCharging" data-package="executive" data-importance="low">
+                        <label for="execWirelessCharging">
+                            <span class="item-title">Wireless Charging</span>
+                        </label>
+                        <span class="importance-badge low">Low</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="execWiFiHotspot" data-package="executive" data-importance="low">
+                        <label for="execWiFiHotspot">
+                            <span class="item-title">WiFi Hotspot</span>
+                        </label>
+                        <span class="importance-badge low">Low</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3>Premium Package (ZPP)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="premHeadUpDisplay" data-package="premium" data-importance="high">
+                        <label for="premHeadUpDisplay">
+                            <span class="item-title">Head-Up Display (HUD)</span>
+                            <span class="item-notes">Look for recessed panel on dashboard</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="premComfortAccess" data-package="premium" data-importance="high">
+                        <label for="premComfortAccess">
+                            <span class="item-title">Comfort Access (Keyless Entry)</span>
+                            <span class="item-notes">Check for ridged lines on door handles</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="premLiveCockpitPro" data-package="premium" data-importance="medium">
+                        <label for="premLiveCockpitPro">
+                            <span class="item-title">Live Cockpit Pro (Navigation)</span>
+                            <span class="item-notes">10.25" widescreen vs standard 8.8"</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="premLumbarSupport" data-package="premium" data-importance="medium">
+                        <label for="premLumbarSupport">
+                            <span class="item-title">Lumbar Support</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3>Driving Assistance Package (ZDP)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="driveAssistActiveCruise" data-package="driving"
+                            data-importance="high">
+                        <label for="driveAssistActiveCruise">
+                            <span class="item-title">Active Cruise Control with Stop & Go</span>
+                            <span class="item-notes">Look for radar sensor in lower front bumper</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="driveAssistLaneKeep" data-package="driving" data-importance="medium">
+                        <label for="driveAssistLaneKeep">
+                            <span class="item-title">Lane Keeping Assist</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="driveAssistBlindSpot" data-package="driving"
+                            data-importance="medium">
+                        <label for="driveAssistBlindSpot">
+                            <span class="item-title">Active Blind Spot Detection</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3>Parking Assistance Package (ZPK)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="parkSurroundView" data-package="parking" data-importance="medium">
+                        <label for="parkSurroundView">
+                            <span class="item-title">Surround View 3D Cameras</span>
+                            <span class="item-notes">Look for cameras under side mirrors</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="parkReversingAssistant" data-package="parking" data-importance="low">
+                        <label for="parkReversingAssistant">
+                            <span class="item-title">Reversing Assistant</span>
+                        </label>
+                        <span class="importance-badge low">Low</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="exterior-tab">
+            <div class="checklist-section">
+                <h3>Exterior Features</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="extAdaptiveSuspension" data-importance="high">
+                        <label for="extAdaptiveSuspension">
+                            <span class="item-title">Adaptive M Suspension</span>
+                            <span class="item-notes">Check if "Chassis & Steering" appears in Sport mode settings</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="extMSportBrakes" data-importance="high">
+                        <label for="extMSportBrakes">
+                            <span class="item-title">M Sport Brakes with Blue Calipers</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="ext19InchWheels" data-importance="medium">
+                        <label for="ext19InchWheels">
+                            <span class="item-title">19-inch M Wheels</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="extPowerTailgate" data-importance="medium">
+                        <label for="extPowerTailgate">
+                            <span class="item-title">Power Tailgate</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="extSunroof" data-importance="medium">
+                        <label for="extSunroof">
+                            <span class="item-title">Panoramic Sunroof</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="interior-tab">
+            <div class="checklist-section">
+                <h3>Interior Features</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="intHeatedSeats" data-importance="high">
+                        <label for="intHeatedSeats">
+                            <span class="item-title">Heated Front Seats</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="intVernascaLeather" data-importance="high">
+                        <label for="intVernascaLeather">
+                            <span class="item-title">Vernasca Leather Upholstery</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="intAmbientLighting" data-importance="medium">
+                        <label for="intAmbientLighting">
+                            <span class="item-title">Ambient Lighting</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="intMSportSteering" data-importance="medium">
+                        <label for="intMSportSteering">
+                            <span class="item-title">M Sport Steering Wheel</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="mechanical-tab">
+            <div class="checklist-section">
+                <h3>Mechanical & Performance</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mechXtraBoost" data-importance="high">
+                        <label for="mechXtraBoost">
+                            <span class="item-title">XtraBoost Function</span>
+                            <span class="item-notes">Check for XtraBoost button in center console</span>
+                        </label>
+                        <span class="importance-badge high">High</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mechMSportDiff" data-importance="medium">
+                        <label for="mechMSportDiff">
+                            <span class="item-title">M Sport Differential</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mechDrivingModes" data-importance="medium">
+                        <label for="mechDrivingModes">
+                            <span class="item-title">Driving Experience Control</span>
+                            <span class="item-notes">ELECTRIC, HYBRID, SPORT, and ADAPTIVE modes</span>
+                        </label>
+                        <span class="importance-badge medium">Medium</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2>Package Summary</h2>
+            <div id="packageSummary">
+                <div class="summary-placeholder">Complete some checks to see package summary</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="saveBtn" class="btn-primary">Save This Car</button>
+            <button id="clearBtn" class="btn-secondary">Clear Form</button>
+        </div>
+
+        <div class="saved-cars-section">
+            <h2>Saved Cars</h2>
+            <div id="savedCarsList" class="saved-cars-list">
+                <div class="empty-state">No saved cars yet. Save a car to see it here.</div>
+            </div>
         </div>
     </div>
 
-    <div class="checklist-section">
-        <h2>Packages & Options</h2>
-
-        <h3>Executive Package (ZPX)</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="execAdaptiveLED" data-package="executive">
-            <label for="execAdaptiveLED">Adaptive Full LED Headlights with Cornering
-                <div class="notes">Look for blue-ish inner rings in headlights</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="execHarmanKardon" data-package="executive">
-            <label for="execHarmanKardon">Harman Kardon Surround Sound System
-                <div class="notes">Check for metallic speaker grilles with branding</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="execHeatedSteering" data-package="executive">
-            <label for="execHeatedSteering">Heated Steering Wheel
-                <div class="notes">Look for heating button on lower steering wheel spoke</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="execWirelessCharging" data-package="executive">
-            <label for="execWirelessCharging">Wireless Charging</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="execWiFiHotspot" data-package="executive">
-            <label for="execWiFiHotspot">WiFi Hotspot</label>
-        </div>
-
-        <h3>Premium Package (ZPP)</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="premHeadUpDisplay" data-package="premium">
-            <label for="premHeadUpDisplay">Head-Up Display (HUD)
-                <div class="notes">Look for recessed panel on dashboard</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="premComfortAccess" data-package="premium">
-            <label for="premComfortAccess">Comfort Access (Keyless Entry)
-                <div class="notes">Check for ridged lines on door handles</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="premLiveCockpitPro" data-package="premium">
-            <label for="premLiveCockpitPro">Live Cockpit Pro (Navigation)
-                <div class="notes">10.25" widescreen vs standard 8.8"</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="premLumbarSupport" data-package="premium">
-            <label for="premLumbarSupport">Lumbar Support</label>
-        </div>
-
-        <h3>Driving Assistance Package (ZDP)</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="driveAssistActiveCruise" data-package="driving">
-            <label for="driveAssistActiveCruise">Active Cruise Control with Stop & Go
-                <div class="notes">Look for radar sensor in lower front bumper</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="driveAssistLaneKeep" data-package="driving">
-            <label for="driveAssistLaneKeep">Lane Keeping Assist</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="driveAssistBlindSpot" data-package="driving">
-            <label for="driveAssistBlindSpot">Active Blind Spot Detection</label>
-        </div>
-
-        <h3>Parking Assistance Package (ZPK)</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="parkSurroundView" data-package="parking">
-            <label for="parkSurroundView">Surround View 3D Cameras
-                <div class="notes">Look for cameras under side mirrors</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="parkReversingAssistant" data-package="parking">
-            <label for="parkReversingAssistant">Reversing Assistant</label>
-        </div>
-
-        <h3>Key Standalone Options</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="optAdaptiveSuspension">
-            <label for="optAdaptiveSuspension">Adaptive M Suspension
-                <div class="notes">Check if "Chassis & Steering" appears in Sport mode settings</div>
-            </label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="optMSportBrakes">
-            <label for="optMSportBrakes">M Sport Brakes with Blue Calipers</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="opt19InchWheels">
-            <label for="opt19InchWheels">19-inch M Wheels</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="optHeatedSeats">
-            <label for="optHeatedSeats">Heated Front Seats</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="optPowerTailgate">
-            <label for="optPowerTailgate">Power Tailgate</label>
+    <!-- Modal for car details -->
+    <div id="carModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCarName">Car Details</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="modalCarDetails"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalLoadBtn" class="btn-primary">Load This Car</button>
+                <button id="modalDeleteBtn" class="btn-danger">Delete Car</button>
+            </div>
         </div>
     </div>
 
-    <div class="summary" id="summarySection">
-        <h3>Package Summary</h3>
-        <div id="packageSummary">
-            <!-- Summary will be populated by JavaScript -->
-        </div>
-    </div>
-
-    <div class="buttons">
-        <button id="saveBtn">Save This Car</button>
-        <button id="clearBtn">Clear Form</button>
-    </div>
-
-    <div class="saved-cars">
-        <h2>Saved Cars</h2>
-        <div id="savedCarsList">
-            <!-- Saved cars will appear here -->
-        </div>
-    </div>
-
-    <script src="assets/js/script.js" async defer></script>
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>
