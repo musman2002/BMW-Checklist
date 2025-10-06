@@ -1,22 +1,165 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="assets/css/style.css">
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        
-        <script src="assets/js/script.js" async defer></script>
-    </body>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BMW 330e M Sport Package Checklist</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>BMW 330e M Sport Package Checklist</h1>
+        <p>Use this checklist to verify packages and options before purchasing</p>
+    </header>
+
+    <div class="car-info">
+        <h2>Car Information</h2>
+        <div class="form-group">
+            <label for="carName">Car Name/Nickname:</label>
+            <input type="text" id="carName" placeholder="e.g., Blue M Sport, Dealer Special">
+        </div>
+        <div class="form-group">
+            <label for="licensePlate">License Plate Number:</label>
+            <input type="text" id="licensePlate" placeholder="e.g., ABC 123">
+        </div>
+        <div class="form-group">
+            <label for="vinNumber">VIN Number (Optional):</label>
+            <input type="text" id="vinNumber" placeholder="WBxxx...">
+        </div>
+    </div>
+
+    <div class="checklist-section">
+        <h2>Packages & Options</h2>
+
+        <h3>Executive Package (ZPX)</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="execAdaptiveLED" data-package="executive">
+            <label for="execAdaptiveLED">Adaptive Full LED Headlights with Cornering
+                <div class="notes">Look for blue-ish inner rings in headlights</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="execHarmanKardon" data-package="executive">
+            <label for="execHarmanKardon">Harman Kardon Surround Sound System
+                <div class="notes">Check for metallic speaker grilles with branding</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="execHeatedSteering" data-package="executive">
+            <label for="execHeatedSteering">Heated Steering Wheel
+                <div class="notes">Look for heating button on lower steering wheel spoke</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="execWirelessCharging" data-package="executive">
+            <label for="execWirelessCharging">Wireless Charging</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="execWiFiHotspot" data-package="executive">
+            <label for="execWiFiHotspot">WiFi Hotspot</label>
+        </div>
+
+        <h3>Premium Package (ZPP)</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="premHeadUpDisplay" data-package="premium">
+            <label for="premHeadUpDisplay">Head-Up Display (HUD)
+                <div class="notes">Look for recessed panel on dashboard</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="premComfortAccess" data-package="premium">
+            <label for="premComfortAccess">Comfort Access (Keyless Entry)
+                <div class="notes">Check for ridged lines on door handles</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="premLiveCockpitPro" data-package="premium">
+            <label for="premLiveCockpitPro">Live Cockpit Pro (Navigation)
+                <div class="notes">10.25" widescreen vs standard 8.8"</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="premLumbarSupport" data-package="premium">
+            <label for="premLumbarSupport">Lumbar Support</label>
+        </div>
+
+        <h3>Driving Assistance Package (ZDP)</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="driveAssistActiveCruise" data-package="driving">
+            <label for="driveAssistActiveCruise">Active Cruise Control with Stop & Go
+                <div class="notes">Look for radar sensor in lower front bumper</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="driveAssistLaneKeep" data-package="driving">
+            <label for="driveAssistLaneKeep">Lane Keeping Assist</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="driveAssistBlindSpot" data-package="driving">
+            <label for="driveAssistBlindSpot">Active Blind Spot Detection</label>
+        </div>
+
+        <h3>Parking Assistance Package (ZPK)</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="parkSurroundView" data-package="parking">
+            <label for="parkSurroundView">Surround View 3D Cameras
+                <div class="notes">Look for cameras under side mirrors</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="parkReversingAssistant" data-package="parking">
+            <label for="parkReversingAssistant">Reversing Assistant</label>
+        </div>
+
+        <h3>Key Standalone Options</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="optAdaptiveSuspension">
+            <label for="optAdaptiveSuspension">Adaptive M Suspension
+                <div class="notes">Check if "Chassis & Steering" appears in Sport mode settings</div>
+            </label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="optMSportBrakes">
+            <label for="optMSportBrakes">M Sport Brakes with Blue Calipers</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="opt19InchWheels">
+            <label for="opt19InchWheels">19-inch M Wheels</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="optHeatedSeats">
+            <label for="optHeatedSeats">Heated Front Seats</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="optPowerTailgate">
+            <label for="optPowerTailgate">Power Tailgate</label>
+        </div>
+    </div>
+
+    <div class="summary" id="summarySection">
+        <h3>Package Summary</h3>
+        <div id="packageSummary">
+            <!-- Summary will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button id="saveBtn">Save This Car</button>
+        <button id="clearBtn">Clear Form</button>
+    </div>
+
+    <div class="saved-cars">
+        <h2>Saved Cars</h2>
+        <div id="savedCarsList">
+            <!-- Saved cars will appear here -->
+        </div>
+    </div>
+
+    <script src="assets/js/script.js" async defer></script>
+</body>
+
 </html>
