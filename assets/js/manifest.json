@@ -1,7 +1,7 @@
 {
-	"name": "BMW 330e M Sport Checklist",
-	"short_name": "BMW Checklist",
-	"description": "Ultimate checklist for BMW 330e M Sport packages and options",
+	"name": "BMW 330e M Sport Ultimate Checklist",
+	"short_name": "BMW M Sport Checklist",
+	"description": "Complete checklist for BMW 330e M Sport packages, options and standard equipment",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#ffffff",

@@ -1,4 +1,4 @@
-// BMW 330e M Sport Checklist Application
+// BMW 330e M Sport Ultimate Checklist Application
 class BMWChecklistApp {
 	constructor() {
 		this.savedCars = JSON.parse(localStorage.getItem("bmw330eChecklist")) || [];
@@ -23,6 +23,7 @@ class BMWChecklistApp {
 		// Checklist item changes
 		document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
 			checkbox.addEventListener("change", () => {
+				this.updateChecklistItemState(checkbox);
 				this.updatePackageSummary();
 			});
 		});
@@ -34,6 +35,9 @@ class BMWChecklistApp {
 		document
 			.getElementById("clearBtn")
 			.addEventListener("click", () => this.clearForm());
+		document
+			.getElementById("quickCheckBtn")
+			.addEventListener("click", () => this.toggleQuickCheckMode());
 
 		// Export/Import buttons
 		document
@@ -82,6 +86,15 @@ class BMWChecklistApp {
 		document.getElementById(`${tabName}-tab`).classList.add("active");
 	}
 
+	updateChecklistItemState(checkbox) {
+		const checklistItem = checkbox.closest(".checklist-item");
+		if (checkbox.checked) {
+			checklistItem.classList.add("checked");
+		} else {
+			checklistItem.classList.remove("checked");
+		}
+	}
+
 	getChecklistData() {
 		const checklistData = {};
 		document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
@@ -89,6 +102,8 @@ class BMWChecklistApp {
 				checked: checkbox.checked,
 				package: checkbox.getAttribute("data-package"),
 				importance: checkbox.getAttribute("data-importance"),
+				label:
+					checkbox.nextElementSibling.querySelector(".item-title").textContent,
 			};
 		});
 		return checklistData;
@@ -96,6 +111,27 @@ class BMWChecklistApp {
 
 	updatePackageSummary() {
 		const packages = {
+			"m-sport": {
+				name: "M Sport Package",
+				items: [
+					"msportWheels",
+					"msportShadowline",
+					"msportBodykit",
+					"msportMirrors",
+					"msportSteering",
+					"msportSeats",
+					"msportUpholstery",
+					"msportTrim",
+					"msportHeadlining",
+					"msportAircon",
+					"msportHeatedSeats",
+					"msportSeatAdjust",
+					"msportRearSeats",
+					"msportHeadrests",
+					"msportStorage",
+				],
+				checked: 0,
+			},
 			executive: {
 				name: "Executive Package",
 				items: [
@@ -132,29 +168,50 @@ class BMWChecklistApp {
 				checked: 0,
 			},
 			exterior: {
-				name: "Exterior Features",
+				name: "Exterior Options",
 				items: [
 					"extAdaptiveSuspension",
 					"extMSportBrakes",
 					"ext19InchWheels",
 					"extPowerTailgate",
 					"extSunroof",
+					"extMetallicPaint",
 				],
 				checked: 0,
 			},
 			interior: {
-				name: "Interior Features",
+				name: "Interior Options",
 				items: [
-					"intHeatedSeats",
 					"intVernascaLeather",
 					"intAmbientLighting",
-					"intMSportSteering",
+					"intMemorySeats",
+					"intRearHeated",
+				],
+				checked: 0,
+			},
+			technology: {
+				name: "Technology",
+				items: [
+					"techLiveCockpitPlus",
+					"techWidescreen",
+					"techOnlineServices",
+					"techTeleservices",
+					"techConnectedPro",
+					"techPersonalESIM",
+					"techDAB",
+					"techAppleCarPlay",
 				],
 				checked: 0,
 			},
 			mechanical: {
-				name: "Mechanical Features",
-				items: ["mechXtraBoost", "mechMSportDiff", "mechDrivingModes"],
+				name: "Mechanical",
+				items: [
+					"mechXtraBoost",
+					"mechMSportDiff",
+					"mechDrivingModes",
+					"mechChargingCable",
+					"mechEDriveSound",
+				],
 				checked: 0,
 			},
 		};
@@ -172,6 +229,8 @@ class BMWChecklistApp {
 		// Generate summary HTML
 		let summaryHTML = "";
 		let hasPackages = false;
+		let totalChecked = 0;
+		let totalItems = 0;
 
 		for (const packageKey in packages) {
 			const pkg = packages[packageKey];
@@ -181,6 +240,8 @@ class BMWChecklistApp {
 					pkg.items.length > 0
 						? Math.round((pkg.checked / pkg.items.length) * 100)
 						: 0;
+				totalChecked += pkg.checked;
+				totalItems += pkg.items.length;
 
 				summaryHTML += `
                     <div class="summary-card">
@@ -189,20 +250,32 @@ class BMWChecklistApp {
                             <div class="progress-fill" style="width: ${percentage}%"></div>
                         </div>
                         <div class="summary-stats">
-                            <span>${pkg.checked}/${pkg.items.length} features</span>
-                            <span>${percentage}% complete</span>
+                            <span>${pkg.checked}/${pkg.items.length}</span>
+                            <span>${percentage}%</span>
                         </div>
                     </div>
                 `;
 			}
 		}
 
+		const overallPercentage =
+			totalItems > 0 ? Math.round((totalChecked / totalItems) * 100) : 0;
+
 		const packageSummary = document.getElementById("packageSummary");
 		if (hasPackages) {
-			packageSummary.innerHTML = `<div class="package-summary">${summaryHTML}</div>`;
+			summaryHTML = `
+                <div class="overall-summary" style="margin-bottom: 20px; padding: 15px; background: #e9f7fe; border-radius: 8px;">
+                    <h3 style="margin-top: 0; color: #0066b3;">Overall Progress: ${totalChecked}/${totalItems} items (${overallPercentage}%)</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${overallPercentage}%"></div>
+                    </div>
+                </div>
+                <div class="package-summary">${summaryHTML}</div>
+            `;
+			packageSummary.innerHTML = summaryHTML;
 		} else {
 			packageSummary.innerHTML =
-				'<div class="summary-placeholder">Complete some checks to see package summary</div>';
+				'<div class="summary-placeholder">Complete some checks to see detailed summary</div>';
 		}
 	}
 
@@ -220,6 +293,7 @@ class BMWChecklistApp {
 			name: carName,
 			licensePlate: licensePlate,
 			vin: document.getElementById("vinNumber").value.trim(),
+			price: document.getElementById("carPrice").value.trim(),
 			notes: document.getElementById("carNotes").value.trim(),
 			timestamp: new Date().toLocaleString(),
 			checklist: this.getChecklistData(),
@@ -267,11 +341,13 @@ class BMWChecklistApp {
 			document.getElementById("carName").value = "";
 			document.getElementById("licensePlate").value = "";
 			document.getElementById("vinNumber").value = "";
+			document.getElementById("carPrice").value = "";
 			document.getElementById("carNotes").value = "";
 			document
 				.querySelectorAll('input[type="checkbox"]')
 				.forEach((checkbox) => {
 					checkbox.checked = false;
+					this.updateChecklistItemState(checkbox);
 				});
 			this.updatePackageSummary();
 			this.currentCarId = null;
@@ -308,6 +384,7 @@ class BMWChecklistApp {
                     <div class="saved-car-details">
                         <span>License: ${car.licensePlate}</span>
                         <span>VIN: ${car.vin || "N/A"}</span>
+                        ${car.price ? `<span>Price: £${car.price}</span>` : ""}
                         <span>Saved: ${car.timestamp}</span>
                     </div>
                     <div class="saved-car-progress">
@@ -353,6 +430,11 @@ class BMWChecklistApp {
             <div class="car-details">
                 <p><strong>License Plate:</strong> ${car.licensePlate}</p>
                 <p><strong>VIN:</strong> ${car.vin || "N/A"}</p>
+                ${
+									car.price
+										? `<p><strong>Price:</strong> £${car.price}</p>`
+										: ""
+								}
                 <p><strong>Saved:</strong> ${car.timestamp}</p>
                 ${
 									car.notes ? `<p><strong>Notes:</strong> ${car.notes}</p>` : ""
@@ -366,12 +448,7 @@ class BMWChecklistApp {
 		// Add checked features to the list
 		for (const key in car.checklist) {
 			if (car.checklist[key].checked) {
-				const checkbox = document.getElementById(key);
-				if (checkbox) {
-					const label = checkbox.nextElementSibling;
-					const title = label.querySelector(".item-title").textContent;
-					detailsHTML += `<li>${title}</li>`;
-				}
+				detailsHTML += `<li>${car.checklist[key].label}</li>`;
 			}
 		}
 
@@ -391,6 +468,7 @@ class BMWChecklistApp {
 		document.getElementById("carName").value = car.name;
 		document.getElementById("licensePlate").value = car.licensePlate;
 		document.getElementById("vinNumber").value = car.vin || "";
+		document.getElementById("carPrice").value = car.price || "";
 		document.getElementById("carNotes").value = car.notes || "";
 
 		// Set checkboxes
@@ -398,6 +476,7 @@ class BMWChecklistApp {
 			const checkbox = document.getElementById(key);
 			if (checkbox) {
 				checkbox.checked = car.checklist[key].checked;
+				this.updateChecklistItemState(checkbox);
 			}
 		}
 
@@ -443,6 +522,25 @@ class BMWChecklistApp {
 		document.getElementById("carModal").style.display = "none";
 	}
 
+	toggleQuickCheckMode() {
+		// This would implement a simplified view for quick checking
+		// For now, just scroll to the first unchecked item
+		const firstUnchecked = document.querySelector(
+			'input[type="checkbox"]:not(:checked)'
+		);
+		if (firstUnchecked) {
+			firstUnchecked.scrollIntoView({ behavior: "smooth", block: "center" });
+			// Highlight the item temporarily
+			const item = firstUnchecked.closest(".checklist-item");
+			item.style.backgroundColor = "#fff3cd";
+			setTimeout(() => {
+				item.style.backgroundColor = "";
+			}, 2000);
+		} else {
+			alert("All items have been checked!");
+		}
+	}
+
 	exportData() {
 		const dataStr = JSON.stringify(this.savedCars, null, 2);
 		const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -450,7 +548,7 @@ class BMWChecklistApp {
 		const url = URL.createObjectURL(dataBlob);
 		const link = document.createElement("a");
 		link.href = url;
-		link.download = "bmw_330e_checklist_data.json";
+		link.download = "bmw_330e_m_sport_checklist.json";
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);

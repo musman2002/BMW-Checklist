@@ -17,6 +17,7 @@
     --border-color: #dee2e6;
     --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --border-radius: 8px;
+    --msport-color: #0056a3;
 }
 
 body {
@@ -126,6 +127,10 @@ button {
     flex-direction: column;
 }
 
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
 .form-group label {
     margin-bottom: 5px;
     font-weight: bold;
@@ -146,12 +151,35 @@ textarea {
     resize: vertical;
 }
 
+/* Package Header */
+.package-header {
+    background: linear-gradient(135deg, var(--msport-color), var(--primary-color));
+    color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.package-header h2 {
+    margin-bottom: 5px;
+    color: white;
+}
+
+.package-description {
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
 /* Tab Styles */
 .tabs {
     display: flex;
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
     overflow-x: auto;
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 5px;
+    box-shadow: var(--shadow);
 }
 
 .tab-button {
@@ -159,16 +187,24 @@ textarea {
     border: none;
     padding: 12px 20px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--secondary-color);
     border-bottom: 3px solid transparent;
     white-space: nowrap;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+    margin: 0 2px;
 }
 
 .tab-button.active {
     color: var(--primary-color);
     border-bottom: 3px solid var(--primary-color);
     font-weight: bold;
+    background-color: #f0f8ff;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: #f8f9fa;
 }
 
 .tab-content {
@@ -208,10 +244,16 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     transition: background-color 0.2s;
+    position: relative;
 }
 
 .checklist-item:hover {
     background-color: #f8f9fa;
+}
+
+.checklist-item.checked {
+    background-color: #f0fff4;
+    border-color: #d1f2d1;
 }
 
 .checklist-item input[type="checkbox"] {
@@ -244,21 +286,37 @@ textarea {
     font-size: 0.75rem;
     font-weight: bold;
     margin-left: 10px;
+    white-space: nowrap;
 }
 
 .importance-badge.high {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .importance-badge.medium {
     background-color: #fff3cd;
     color: #856404;
+    border: 1px solid #ffeaa7;
 }
 
 .importance-badge.low {
     background-color: #d1ecf1;
     color: #0c5460;
+    border: 1px solid #b8daff;
+}
+
+.importance-badge.standard {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+.importance-badge.optional {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 /* Summary Section */
@@ -367,6 +425,7 @@ textarea {
     justify-content: space-between;
     align-items: center;
     transition: box-shadow 0.3s;
+    background: white;
 }
 
 .saved-car-card:hover {
@@ -384,6 +443,7 @@ textarea {
     font-size: 0.9rem;
     color: var(--secondary-color);
     margin-bottom: 5px;
+    flex-wrap: wrap;
 }
 
 .saved-car-progress {
@@ -474,6 +534,34 @@ textarea {
     border-top: 1px solid var(--border-color);
 }
 
+/* Quick Check Mode */
+.quick-check-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    z-index: 1001;
+    display: none;
+}
+
+.quick-check-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quick-check-close {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .container {
@@ -521,6 +609,10 @@ textarea {
         width: 95%;
         margin: 10% auto;
     }
+
+    .package-summary {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
@@ -534,7 +626,13 @@ textarea {
         margin-top: 8px;
     }
 
-    .package-summary {
-        grid-template-columns: 1fr;
+    .saved-car-details {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .tab-button {
+        padding: 10px 15px;
+        font-size: 0.8rem;
     }
 }
