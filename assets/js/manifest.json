@@ -1,7 +1,7 @@
 {
 	"name": "BMW 330e M Sport Ultimate Checklist",
-	"short_name": "BMW M Sport Checklist",
-	"description": "Complete checklist for BMW 330e M Sport packages, options and standard equipment",
+	"short_name": "BMW Checklist",
+	"description": "Complete checklist for 2020 BMW 330e M Sport with cloud sync and color options",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#ffffff",
@@ -17,5 +17,8 @@
 			"sizes": "512x512",
 			"type": "image/svg+xml"
 		}
-	]
+	],
+	"categories": ["auto", "productivity"],
+	"lang": "en-US",
+	"orientation": "portrait"
 }

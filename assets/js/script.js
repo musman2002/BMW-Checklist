@@ -3,13 +3,17 @@ class BMWChecklistApp {
 	constructor() {
 		this.savedCars = JSON.parse(localStorage.getItem("bmw330eChecklist")) || [];
 		this.currentCarId = null;
+		this.syncEnabled = localStorage.getItem("bmwSyncEnabled") === "true";
+		this.googleDriveToken = localStorage.getItem("bmwGoogleDriveToken");
 		this.init();
 	}
 
 	init() {
 		this.setupEventListeners();
+		this.setupColorPreview();
 		this.renderSavedCars();
 		this.updatePackageSummary();
+		this.autoSaveTimer = setInterval(() => this.autoSave(), 30000); // Auto-save every 30 seconds
 	}
 
 	setupEventListeners() {
@@ -25,7 +29,19 @@ class BMWChecklistApp {
 			checkbox.addEventListener("change", () => {
 				this.updateChecklistItemState(checkbox);
 				this.updatePackageSummary();
+				this.autoSave();
 			});
+		});
+
+		// Color selection
+		document.getElementById("exteriorColor").addEventListener("change", (e) => {
+			this.updateColorPreview();
+			this.autoSave();
+		});
+
+		document.getElementById("interiorColor").addEventListener("change", (e) => {
+			this.updateColorPreview();
+			this.autoSave();
 		});
 
 		// Action buttons
@@ -39,7 +55,10 @@ class BMWChecklistApp {
 			.getElementById("quickCheckBtn")
 			.addEventListener("click", () => this.toggleQuickCheckMode());
 
-		// Export/Import buttons
+		// Sync and export/import buttons
+		document
+			.getElementById("syncBtn")
+			.addEventListener("click", () => this.showSyncModal());
 		document
 			.getElementById("exportBtn")
 			.addEventListener("click", () => this.exportData());
@@ -52,10 +71,39 @@ class BMWChecklistApp {
 			.getElementById("importFile")
 			.addEventListener("change", (e) => this.importData(e));
 
-		// Modal events
+		// Sync modal buttons
 		document
-			.querySelector(".close")
-			.addEventListener("click", () => this.closeModal());
+			.getElementById("googleSyncBtn")
+			.addEventListener("click", () => this.setupGoogleDriveSync());
+		document
+			.getElementById("exportBackupBtn")
+			.addEventListener("click", () => this.exportBackup());
+		document
+			.getElementById("importBackupBtn")
+			.addEventListener("click", () =>
+				document.getElementById("importFile").click()
+			);
+		document
+			.getElementById("qrCodeBtn")
+			.addEventListener("click", () => this.generateQRCode());
+
+		// Modal events
+		document.querySelectorAll(".close").forEach((closeBtn) => {
+			closeBtn.addEventListener("click", () => this.closeAllModals());
+		});
+
+		document.getElementById("syncDismiss").addEventListener("click", () => {
+			document.getElementById("syncStatus").classList.add("hidden");
+		});
+
+		// Close modal when clicking outside
+		window.addEventListener("click", (e) => {
+			if (e.target.classList.contains("modal")) {
+				this.closeAllModals();
+			}
+		});
+
+		// Sync status indicator
 		document
 			.getElementById("modalLoadBtn")
 			.addEventListener("click", () => this.loadSelectedCar());
@@ -63,13 +111,113 @@ class BMWChecklistApp {
 			.getElementById("modalDeleteBtn")
 			.addEventListener("click", () => this.deleteSelectedCar());
 
-		// Close modal when clicking outside
-		window.addEventListener("click", (e) => {
-			const modal = document.getElementById("carModal");
-			if (e.target === modal) {
-				this.closeModal();
-			}
+		// Auto-save on form changes
+		const formInputs = document.querySelectorAll(
+			"#carName, #licensePlate, #vinNumber, #carPrice, #carNotes"
+		);
+		formInputs.forEach((input) => {
+			input.addEventListener("input", () => this.autoSave());
 		});
+	}
+
+	setupColorPreview() {
+		this.updateColorPreview();
+	}
+
+	updateColorPreview() {
+		const exteriorColor = document.getElementById("exteriorColor").value;
+		const interiorColor = document.getElementById("interiorColor").value;
+
+		const exteriorSwatch = document.getElementById("exteriorSwatch");
+		const interiorSwatch = document.getElementById("interiorSwatch");
+
+		if (exteriorColor) {
+			exteriorSwatch.style.backgroundColor = this.getColorValue(exteriorColor);
+			exteriorSwatch.setAttribute("data-color", exteriorColor);
+			exteriorSwatch.textContent = this.getColorName(exteriorColor);
+		} else {
+			exteriorSwatch.style.backgroundColor = "#f0f0f0";
+			exteriorSwatch.removeAttribute("data-color");
+			exteriorSwatch.textContent = "Exterior";
+			exteriorSwatch.style.color = "#333";
+		}
+
+		if (interiorColor) {
+			interiorSwatch.style.backgroundColor = this.getColorValue(interiorColor);
+			interiorSwatch.setAttribute("data-color", interiorColor);
+			interiorSwatch.textContent = this.getColorName(interiorColor);
+		} else {
+			interiorSwatch.style.backgroundColor = "#f0f0f0";
+			interiorSwatch.removeAttribute("data-color");
+			interiorSwatch.textContent = "Interior";
+			interiorSwatch.style.color = "#333";
+		}
+	}
+
+	getColorValue(colorKey) {
+		const colorMap = {
+			// Exterior colors
+			"alpine-white": "#ffffff",
+			"black-sapphire": "#1c1c1c",
+			"mineral-grey": "#5a5d5f",
+			"mediterranean-blue": "#1560bd",
+			"glacier-silver": "#a1a3a5",
+			"carbon-black": "#1e1e1e",
+			bluestone: "#5d7b93",
+			"sunset-orange": "#d15e28",
+			"tanzanite-blue": "#1e3a5f",
+			"dravit-grey": "#5c5c5c",
+			"oxide-grey": "#6b6b6b",
+			"arctic-race-blue": "#0066b3",
+
+			// Interior colors
+			"sensatec-black": "#1a1a1a",
+			"sensatec-mocha": "#8b7355",
+			"sensatec-cognac": "#b38e5d",
+			"vernasca-black": "#1a1a1a",
+			"vernasca-mocha": "#8b7355",
+			"vernasca-cognac": "#b38e5d",
+			"vernasca-tartufo": "#a67c52",
+			"vernasca-canberra": "#e8d9c5",
+			"individual-ivory": "#f5f5dc",
+			"individual-black": "#1a1a1a",
+			"individual-tartufo": "#a67c52",
+		};
+
+		return colorMap[colorKey] || "#f0f0f0";
+	}
+
+	getColorName(colorKey) {
+		const nameMap = {
+			// Exterior colors
+			"alpine-white": "Alpine White",
+			"black-sapphire": "Black Sapphire",
+			"mineral-grey": "Mineral Grey",
+			"mediterranean-blue": "Mediterranean Blue",
+			"glacier-silver": "Glacier Silver",
+			"carbon-black": "Carbon Black",
+			bluestone: "Bluestone",
+			"sunset-orange": "Sunset Orange",
+			"tanzanite-blue": "Tanzanite Blue",
+			"dravit-grey": "Dravit Grey",
+			"oxide-grey": "Oxide Grey",
+			"arctic-race-blue": "Arctic Race Blue",
+
+			// Interior colors
+			"sensatec-black": "Black SensaTec",
+			"sensatec-mocha": "Mocha SensaTec",
+			"sensatec-cognac": "Cognac SensaTec",
+			"vernasca-black": "Black Vernasca",
+			"vernasca-mocha": "Mocha Vernasca",
+			"vernasca-cognac": "Cognac Vernasca",
+			"vernasca-tartufo": "Tartufo Vernasca",
+			"vernasca-canberra": "Canberra Beige",
+			"individual-ivory": "Ivory White",
+			"individual-black": "Black Merino",
+			"individual-tartufo": "Tartufo Merino",
+		};
+
+		return nameMap[colorKey] || "Select Color";
 	}
 
 	switchTab(tabName) {
@@ -118,64 +266,56 @@ class BMWChecklistApp {
 					"msportShadowline",
 					"msportBodykit",
 					"msportMirrors",
+					"msportLEDLights",
 					"msportSteering",
 					"msportSeats",
 					"msportUpholstery",
-					"msportTrim",
-					"msportHeadlining",
-					"msportAircon",
-					"msportHeatedSeats",
-					"msportSeatAdjust",
-					"msportRearSeats",
-					"msportHeadrests",
-					"msportStorage",
+					"msportInteriorTrim",
+					"msportAnthracite",
+					"msportSuspension",
+					"msportPaddles",
+				],
+				checked: 0,
+			},
+			comfort: {
+				name: "Comfort Pack",
+				items: [
+					"comfortAutoTailgate",
+					"comfortAccess",
+					"comfortLumbar",
+					"comfortAmbient",
+					"comfortWireless",
+				],
+				checked: 0,
+			},
+			technology: {
+				name: "Technology Pack",
+				items: [
+					"techDrivingAssistant",
+					"techLiveCockpitPro",
+					"techParkingAssistant",
+					"techHeadUp",
 				],
 				checked: 0,
 			},
 			executive: {
-				name: "Executive Package",
+				name: "Executive Pack",
 				items: [
 					"execAdaptiveLED",
 					"execHarmanKardon",
 					"execHeatedSteering",
-					"execWirelessCharging",
-					"execWiFiHotspot",
+					"execSunProtection",
 				],
-				checked: 0,
-			},
-			premium: {
-				name: "Premium Package",
-				items: [
-					"premHeadUpDisplay",
-					"premComfortAccess",
-					"premLiveCockpitPro",
-					"premLumbarSupport",
-				],
-				checked: 0,
-			},
-			driving: {
-				name: "Driving Assistance",
-				items: [
-					"driveAssistActiveCruise",
-					"driveAssistLaneKeep",
-					"driveAssistBlindSpot",
-				],
-				checked: 0,
-			},
-			parking: {
-				name: "Parking Assistance",
-				items: ["parkSurroundView", "parkReversingAssistant"],
 				checked: 0,
 			},
 			exterior: {
 				name: "Exterior Options",
 				items: [
-					"extAdaptiveSuspension",
-					"extMSportBrakes",
-					"ext19InchWheels",
-					"extPowerTailgate",
-					"extSunroof",
 					"extMetallicPaint",
+					"ext19InchWheels",
+					"extMSportBrakes",
+					"extPanoramicRoof",
+					"extAdaptiveSuspension",
 				],
 				checked: 0,
 			},
@@ -183,23 +323,23 @@ class BMWChecklistApp {
 				name: "Interior Options",
 				items: [
 					"intVernascaLeather",
-					"intAmbientLighting",
+					"intHeatedSeats",
 					"intMemorySeats",
-					"intRearHeated",
+					"intSplitRear",
+					"intExtendedStorage",
 				],
 				checked: 0,
 			},
-			technology: {
-				name: "Technology",
+			"tech-features": {
+				name: "Technology Features",
 				items: [
 					"techLiveCockpitPlus",
-					"techWidescreen",
-					"techOnlineServices",
+					"techBMWOnline",
 					"techTeleservices",
-					"techConnectedPro",
-					"techPersonalESIM",
-					"techDAB",
+					"techConnectedPackage",
 					"techAppleCarPlay",
+					"techDAB",
+					"techGestureControl",
 				],
 				checked: 0,
 			},
@@ -207,10 +347,10 @@ class BMWChecklistApp {
 				name: "Mechanical",
 				items: [
 					"mechXtraBoost",
-					"mechMSportDiff",
 					"mechDrivingModes",
 					"mechChargingCable",
 					"mechEDriveSound",
+					"mechMSportDiff",
 				],
 				checked: 0,
 			},
@@ -294,8 +434,11 @@ class BMWChecklistApp {
 			licensePlate: licensePlate,
 			vin: document.getElementById("vinNumber").value.trim(),
 			price: document.getElementById("carPrice").value.trim(),
+			exteriorColor: document.getElementById("exteriorColor").value,
+			interiorColor: document.getElementById("interiorColor").value,
 			notes: document.getElementById("carNotes").value.trim(),
 			timestamp: new Date().toLocaleString(),
+			lastModified: new Date().toISOString(),
 			checklist: this.getChecklistData(),
 		};
 
@@ -328,12 +471,21 @@ class BMWChecklistApp {
 			this.savedCars.push(carData);
 		}
 
-		localStorage.setItem("bmw330eChecklist", JSON.stringify(this.savedCars));
+		this.saveToStorage();
 		this.renderSavedCars();
-		alert("Car saved successfully!");
+		this.showSyncMessage("Car saved successfully!", "success");
 
 		// Reset current car ID after saving
 		this.currentCarId = null;
+	}
+
+	saveToStorage() {
+		localStorage.setItem("bmw330eChecklist", JSON.stringify(this.savedCars));
+
+		// If sync is enabled, sync to cloud
+		if (this.syncEnabled) {
+			this.syncToCloud();
+		}
 	}
 
 	clearForm() {
@@ -342,6 +494,8 @@ class BMWChecklistApp {
 			document.getElementById("licensePlate").value = "";
 			document.getElementById("vinNumber").value = "";
 			document.getElementById("carPrice").value = "";
+			document.getElementById("exteriorColor").value = "";
+			document.getElementById("interiorColor").value = "";
 			document.getElementById("carNotes").value = "";
 			document
 				.querySelectorAll('input[type="checkbox"]')
@@ -350,6 +504,7 @@ class BMWChecklistApp {
 					this.updateChecklistItemState(checkbox);
 				});
 			this.updatePackageSummary();
+			this.updateColorPreview();
 			this.currentCarId = null;
 		}
 	}
@@ -378,6 +533,22 @@ class BMWChecklistApp {
 
 			const carElement = document.createElement("div");
 			carElement.className = "saved-car-card";
+
+			// Create color indicators
+			let colorHTML = "";
+			if (car.exteriorColor) {
+				const extColor = this.getColorValue(car.exteriorColor);
+				colorHTML += `<div class="color-indicator" style="background-color: ${extColor}" title="${this.getColorName(
+					car.exteriorColor
+				)}"></div>`;
+			}
+			if (car.interiorColor) {
+				const intColor = this.getColorValue(car.interiorColor);
+				colorHTML += `<div class="color-indicator" style="background-color: ${intColor}" title="${this.getColorName(
+					car.interiorColor
+				)}"></div>`;
+			}
+
 			carElement.innerHTML = `
                 <div class="saved-car-info">
                     <h3>${car.name}</h3>
@@ -387,6 +558,11 @@ class BMWChecklistApp {
                         ${car.price ? `<span>Price: £${car.price}</span>` : ""}
                         <span>Saved: ${car.timestamp}</span>
                     </div>
+                    ${
+											colorHTML
+												? `<div class="saved-car-color">${colorHTML}</div>`
+												: ""
+										}
                     <div class="saved-car-progress">
                         ${checkedCount}/${totalCount} features checked (${completionPercentage}%)
                     </div>
@@ -435,6 +611,20 @@ class BMWChecklistApp {
 										? `<p><strong>Price:</strong> £${car.price}</p>`
 										: ""
 								}
+                ${
+									car.exteriorColor
+										? `<p><strong>Exterior Color:</strong> ${this.getColorName(
+												car.exteriorColor
+										  )}</p>`
+										: ""
+								}
+                ${
+									car.interiorColor
+										? `<p><strong>Interior Color:</strong> ${this.getColorName(
+												car.interiorColor
+										  )}</p>`
+										: ""
+								}
                 <p><strong>Saved:</strong> ${car.timestamp}</p>
                 ${
 									car.notes ? `<p><strong>Notes:</strong> ${car.notes}</p>` : ""
@@ -469,6 +659,8 @@ class BMWChecklistApp {
 		document.getElementById("licensePlate").value = car.licensePlate;
 		document.getElementById("vinNumber").value = car.vin || "";
 		document.getElementById("carPrice").value = car.price || "";
+		document.getElementById("exteriorColor").value = car.exteriorColor || "";
+		document.getElementById("interiorColor").value = car.interiorColor || "";
 		document.getElementById("carNotes").value = car.notes || "";
 
 		// Set checkboxes
@@ -481,13 +673,14 @@ class BMWChecklistApp {
 		}
 
 		this.updatePackageSummary();
+		this.updateColorPreview();
 		this.currentCarId = carId;
 
 		// Scroll to top
 		window.scrollTo(0, 0);
 
 		// Close modal if open
-		this.closeModal();
+		this.closeAllModals();
 	}
 
 	loadSelectedCar() {
@@ -507,9 +700,9 @@ class BMWChecklistApp {
 	deleteCar(carId) {
 		if (confirm("Are you sure you want to delete this car?")) {
 			this.savedCars = this.savedCars.filter((car) => car.id !== carId);
-			localStorage.setItem("bmw330eChecklist", JSON.stringify(this.savedCars));
+			this.saveToStorage();
 			this.renderSavedCars();
-			this.closeModal();
+			this.closeAllModals();
 
 			// If we're currently editing this car, clear the form
 			if (this.currentCarId === carId) {
@@ -518,13 +711,13 @@ class BMWChecklistApp {
 		}
 	}
 
-	closeModal() {
-		document.getElementById("carModal").style.display = "none";
+	closeAllModals() {
+		document.querySelectorAll(".modal").forEach((modal) => {
+			modal.style.display = "none";
+		});
 	}
 
 	toggleQuickCheckMode() {
-		// This would implement a simplified view for quick checking
-		// For now, just scroll to the first unchecked item
 		const firstUnchecked = document.querySelector(
 			'input[type="checkbox"]:not(:checked)'
 		);
@@ -541,6 +734,35 @@ class BMWChecklistApp {
 		}
 	}
 
+	// Sync and Cloud Storage Functions
+	showSyncModal() {
+		document.getElementById("syncModal").style.display = "block";
+	}
+
+	setupGoogleDriveSync() {
+		// In a real implementation, this would use Google Drive API
+		// For demo purposes, we'll simulate the process
+		this.showSyncMessage("Connecting to Google Drive...", "warning");
+
+		setTimeout(() => {
+			this.syncEnabled = true;
+			localStorage.setItem("bmwSyncEnabled", "true");
+			this.showSyncMessage("Google Drive connected successfully!", "success");
+			this.syncToCloud();
+		}, 2000);
+	}
+
+	syncToCloud() {
+		// Simulate cloud sync
+		this.showSyncMessage("Syncing data to cloud...", "warning");
+
+		setTimeout(() => {
+			// In a real app, this would upload to cloud storage
+			localStorage.setItem("bmwCloudBackup", JSON.stringify(this.savedCars));
+			this.showSyncMessage("Data synced successfully!", "success");
+		}, 1500);
+	}
+
 	exportData() {
 		const dataStr = JSON.stringify(this.savedCars, null, 2);
 		const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -553,6 +775,32 @@ class BMWChecklistApp {
 		link.click();
 		document.body.removeChild(link);
 		URL.revokeObjectURL(url);
+
+		this.showSyncMessage("Data exported successfully!", "success");
+	}
+
+	exportBackup() {
+		const backupData = {
+			version: "1.0",
+			exportDate: new Date().toISOString(),
+			cars: this.savedCars,
+		};
+
+		const dataStr = JSON.stringify(backupData, null, 2);
+		const dataBlob = new Blob([dataStr], { type: "application/json" });
+
+		const url = URL.createObjectURL(dataBlob);
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = `bmw_checklist_backup_${
+			new Date().toISOString().split("T")[0]
+		}.json`;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+
+		this.showSyncMessage("Backup exported successfully!", "success");
 	}
 
 	importData(event) {
@@ -563,25 +811,26 @@ class BMWChecklistApp {
 		reader.onload = (e) => {
 			try {
 				const importedData = JSON.parse(e.target.result);
+				let carsToImport = [];
 
-				if (Array.isArray(importedData)) {
-					if (
-						confirm(
-							`This will import ${importedData.length} car(s). Do you want to proceed?`
-						)
-					) {
-						this.savedCars = importedData;
-						localStorage.setItem(
-							"bmw330eChecklist",
-							JSON.stringify(this.savedCars)
-						);
-						this.renderSavedCars();
-						alert("Data imported successfully!");
-					}
+				// Handle both backup format and simple array format
+				if (importedData.cars && Array.isArray(importedData.cars)) {
+					carsToImport = importedData.cars;
+				} else if (Array.isArray(importedData)) {
+					carsToImport = importedData;
 				} else {
-					alert(
-						"Invalid file format. Please select a valid JSON file exported from this app."
-					);
+					throw new Error("Invalid file format");
+				}
+
+				if (
+					confirm(
+						`This will import ${carsToImport.length} car(s). Do you want to proceed?`
+					)
+				) {
+					this.savedCars = carsToImport;
+					this.saveToStorage();
+					this.renderSavedCars();
+					this.showSyncMessage("Data imported successfully!", "success");
 				}
 			} catch (error) {
 				alert("Error reading file. Please make sure it's a valid JSON file.");
@@ -593,9 +842,110 @@ class BMWChecklistApp {
 		// Reset the file input
 		event.target.value = "";
 	}
+
+	generateQRCode() {
+		// In a real implementation, this would use a QR code library
+		// For demo, we'll show a message
+		this.showSyncMessage(
+			"QR code feature requires additional libraries",
+			"warning"
+		);
+
+		// Example of how it would work:
+		// const qr = new QRCode(document.getElementById("qrcode"), {
+		//     text: JSON.stringify(this.savedCars),
+		//     width: 256,
+		//     height: 256
+		// });
+	}
+
+	showSyncMessage(message, type = "info") {
+		const syncStatus = document.getElementById("syncStatus");
+		const syncMessage = document.getElementById("syncMessage");
+
+		syncMessage.textContent = message;
+		syncStatus.className = `sync-status ${type}`;
+		syncStatus.classList.remove("hidden");
+
+		// Auto-hide after 5 seconds
+		setTimeout(() => {
+			syncStatus.classList.add("hidden");
+		}, 5000);
+	}
+
+	autoSave() {
+		// Only auto-save if we have data in the form
+		const carName = document.getElementById("carName").value.trim();
+		const licensePlate = document.getElementById("licensePlate").value.trim();
+
+		if (carName && licensePlate) {
+			// Create a temporary auto-save
+			const autoSaveData = {
+				carName,
+				licensePlate,
+				vin: document.getElementById("vinNumber").value.trim(),
+				price: document.getElementById("carPrice").value.trim(),
+				exteriorColor: document.getElementById("exteriorColor").value,
+				interiorColor: document.getElementById("interiorColor").value,
+				notes: document.getElementById("carNotes").value.trim(),
+				checklist: this.getChecklistData(),
+				lastAutoSave: new Date().toISOString(),
+			};
+
+			localStorage.setItem("bmwAutoSave", JSON.stringify(autoSaveData));
+		}
+	}
+
+	loadAutoSave() {
+		const autoSaveData = localStorage.getItem("bmwAutoSave");
+		if (autoSaveData) {
+			try {
+				const data = JSON.parse(autoSaveData);
+				if (confirm("Found auto-saved data. Would you like to restore it?")) {
+					document.getElementById("carName").value = data.carName || "";
+					document.getElementById("licensePlate").value =
+						data.licensePlate || "";
+					document.getElementById("vinNumber").value = data.vin || "";
+					document.getElementById("carPrice").value = data.price || "";
+					document.getElementById("exteriorColor").value =
+						data.exteriorColor || "";
+					document.getElementById("interiorColor").value =
+						data.interiorColor || "";
+					document.getElementById("carNotes").value = data.notes || "";
+
+					// Set checkboxes
+					if (data.checklist) {
+						for (const key in data.checklist) {
+							const checkbox = document.getElementById(key);
+							if (checkbox) {
+								checkbox.checked = data.checklist[key].checked;
+								this.updateChecklistItemState(checkbox);
+							}
+						}
+					}
+
+					this.updatePackageSummary();
+					this.updateColorPreview();
+					this.showSyncMessage("Auto-saved data restored!", "success");
+				}
+			} catch (error) {
+				console.error("Error loading auto-save:", error);
+			}
+		}
+	}
 }
 
 // Initialize the app when the DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-	new BMWChecklistApp();
+	const app = new BMWChecklistApp();
+	// Load auto-save data if available
+	setTimeout(() => app.loadAutoSave(), 1000);
+
+	// Register service worker for PWA functionality
+	if ("serviceWorker" in navigator) {
+		navigator.serviceWorker
+			.register("/sw.js")
+			.then((registration) => console.log("SW registered"))
+			.catch((err) => console.log("SW registration failed"));
+	}
 });

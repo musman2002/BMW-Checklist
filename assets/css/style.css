@@ -636,3 +636,237 @@ textarea {
         font-size: 0.8rem;
     }
 }
+
+/* Previous styles remain the same, adding new styles for colors and sync */
+
+/* Color Selection Styles */
+.color-preview {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.color-swatch {
+    width: 80px;
+    height: 40px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-swatch:hover {
+    transform: scale(1.05);
+    border-color: #0066b3;
+}
+
+.color-swatch span {
+    background: rgba(0,0,0,0.5);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* Color definitions for exterior */
+.color-swatch[data-color="alpine-white"] { background-color: #ffffff; color: #333; }
+.color-swatch[data-color="black-sapphire"] { background-color: #1c1c1c; }
+.color-swatch[data-color="mineral-grey"] { background-color: #5a5d5f; }
+.color-swatch[data-color="mediterranean-blue"] { background-color: #1560bd; }
+.color-swatch[data-color="glacier-silver"] { background-color: #a1a3a5; }
+.color-swatch[data-color="carbon-black"] { background-color: #1e1e1e; }
+.color-swatch[data-color="bluestone"] { background-color: #5d7b93; }
+.color-swatch[data-color="sunset-orange"] { background-color: #d15e28; }
+.color-swatch[data-color="tanzanite-blue"] { background-color: #1e3a5f; }
+.color-swatch[data-color="dravit-grey"] { background-color: #5c5c5c; }
+.color-swatch[data-color="oxide-grey"] { background-color: #6b6b6b; }
+.color-swatch[data-color="arctic-race-blue"] { background-color: #0066b3; }
+
+/* Color definitions for interior */
+.color-swatch[data-color="sensatec-black"] { background-color: #1a1a1a; }
+.color-swatch[data-color="sensatec-mocha"] { background-color: #8b7355; }
+.color-swatch[data-color="sensatec-cognac"] { background-color: #b38e5d; }
+.color-swatch[data-color="vernasca-black"] { background-color: #1a1a1a; }
+.color-swatch[data-color="vernasca-mocha"] { background-color: #8b7355; }
+.color-swatch[data-color="vernasca-cognac"] { background-color: #b38e5d; }
+.color-swatch[data-color="vernasca-tartufo"] { background-color: #a67c52; }
+.color-swatch[data-color="vernasca-canberra"] { background-color: #e8d9c5; color: #333; }
+.color-swatch[data-color="individual-ivory"] { background-color: #f5f5dc; color: #333; }
+.color-swatch[data-color="individual-black"] { background-color: #1a1a1a; }
+.color-swatch[data-color="individual-tartufo"] { background-color: #a67c52; }
+
+/* Sync Status Styles */
+.sync-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    background-color: white;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary-color);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
+}
+
+.sync-status.success {
+    border-left-color: var(--success-color);
+}
+
+.sync-status.error {
+    border-left-color: var(--danger-color);
+}
+
+.sync-status.warning {
+    border-left-color: var(--warning-color);
+}
+
+.sync-dismiss {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--secondary-color);
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sync-dismiss:hover {
+    color: var(--dark-color);
+}
+
+/* Sync Options Styles */
+.sync-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sync-option {
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #f8f9fa;
+}
+
+.sync-option h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.sync-option p {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.sync-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* QR Code Styles */
+.qr-code-container {
+    text-align: center;
+    padding: 20px;
+}
+
+#qrCode {
+    margin: 0 auto 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+/* Enhanced Saved Car Cards with Colors */
+.saved-car-color {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.color-indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+
+/* Cloud Sync Indicator */
+.cloud-sync-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    margin-left: 10px;
+}
+
+.sync-icon {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.sync-icon.synced {
+    background-color: var(--success-color);
+}
+
+.sync-icon.pending {
+    background-color: var(--warning-color);
+}
+
+.sync-icon.error {
+    background-color: var(--danger-color);
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+    .sync-status {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .color-preview {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .color-swatch {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    .sync-actions {
+        flex-direction: column;
+    }
+    
+    .sync-actions button {
+        flex: 1;
+    }
+}
+
+/* Loading animation for sync */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.sync-loading {
+    animation: spin 1s linear infinite;
+}

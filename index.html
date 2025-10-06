@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMW 330e M Sport Ultimate Checklist</title>
+    <title>2020 BMW 330e M Sport Checklist</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="manifest" href="assets/js/manifest.json">
 </head>
@@ -13,15 +13,22 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <h1>BMW 330e M Sport Ultimate Checklist</h1>
-                <p>Complete verification of all packages, options and standard equipment</p>
+                <h1>2020 BMW 330e M Sport Checklist</h1>
+                <p>Complete verification for 2020 model year packages and options</p>
             </div>
             <div class="header-actions">
+                <button id="syncBtn" class="btn-secondary">Sync Data</button>
                 <button id="exportBtn" class="btn-secondary">Export Data</button>
                 <button id="importBtn" class="btn-secondary">Import Data</button>
                 <input type="file" id="importFile" accept=".json" style="display: none;">
             </div>
         </header>
+
+        <!-- Sync Status Indicator -->
+        <div id="syncStatus" class="sync-status hidden">
+            <span id="syncMessage"></span>
+            <button id="syncDismiss" class="sync-dismiss">×</button>
+        </div>
 
         <div class="car-info-section">
             <h2>Car Information</h2>
@@ -42,16 +49,79 @@
                     <label for="carPrice">Price (£):</label>
                     <input type="text" id="carPrice" placeholder="e.g., 35000">
                 </div>
+
+                <!-- Color Selection -->
+                <div class="form-group full-width">
+                    <label for="exteriorColor">Exterior Color:</label>
+                    <select id="exteriorColor">
+                        <option value="">Select Exterior Color</option>
+                        <optgroup label="Standard Colors">
+                            <option value="alpine-white">Alpine White</option>
+                            <option value="black-sapphire">Black Sapphire Metallic</option>
+                            <option value="mineral-grey">Mineral Grey Metallic</option>
+                        </optgroup>
+                        <optgroup label="Metallic Colors">
+                            <option value="mediterranean-blue">Mediterranean Blue Metallic</option>
+                            <option value="glacier-silver">Glacier Silver Metallic</option>
+                            <option value="carbon-black">Carbon Black Metallic</option>
+                            <option value="bluestone">Bluestone Metallic</option>
+                            <option value="sunset-orange">Sunset Orange Metallic</option>
+                        </optgroup>
+                        <optgroup label="Individual Colors">
+                            <option value="tanzanite-blue">Tanzanite Blue II Metallic</option>
+                            <option value="dravit-grey">Dravit Grey Metallic</option>
+                            <option value="oxide-grey">Oxide Grey Metallic</option>
+                            <option value="arctic-race-blue">Arctic Race Blue</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="interiorColor">Interior Color & Upholstery:</label>
+                    <select id="interiorColor">
+                        <option value="">Select Interior Color</option>
+                        <optgroup label="SensaTec Upholstery">
+                            <option value="sensatec-black">Black SensaTec</option>
+                            <option value="sensatec-mocha">Mocha SensaTec</option>
+                            <option value="sensatec-cognac">Cognac SensaTec</option>
+                        </optgroup>
+                        <optgroup label="Vernasca Leather">
+                            <option value="vernasca-black">Black Vernasca Leather</option>
+                            <option value="vernasca-mocha">Mocha Vernasca Leather</option>
+                            <option value="vernasca-cognac">Cognac Vernasca Leather</option>
+                            <option value="vernasca-tartufo">Tartufo Vernasca Leather</option>
+                            <option value="vernasca-canberra">Canberra Beige Vernasca Leather</option>
+                        </optgroup>
+                        <optgroup label="Individual Leather">
+                            <option value="individual-ivory">Ivory White Extended Merino</option>
+                            <option value="individual-black">Black Extended Merino</option>
+                            <option value="individual-tartufo">Tartufo Extended Merino</option>
+                        </optgroup>
+                    </select>
+                </div>
+
                 <div class="form-group full-width">
                     <label for="carNotes">Notes & Observations:</label>
                     <textarea id="carNotes" placeholder="Add any additional notes about this car..."></textarea>
+                </div>
+
+                <!-- Color Preview -->
+                <div class="form-group full-width">
+                    <div class="color-preview">
+                        <div class="color-swatch" id="exteriorSwatch">
+                            <span>Exterior</span>
+                        </div>
+                        <div class="color-swatch" id="interiorSwatch">
+                            <span>Interior</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="tabs">
             <button class="tab-button active" data-tab="m-sport">M Sport Package</button>
-            <button class="tab-button" data-tab="packages">Optional Packages</button>
+            <button class="tab-button" data-tab="optional-packs">Optional Packages</button>
             <button class="tab-button" data-tab="exterior">Exterior</button>
             <button class="tab-button" data-tab="interior">Interior</button>
             <button class="tab-button" data-tab="technology">Technology</button>
@@ -61,18 +131,18 @@
         <!-- M SPORT PACKAGE TAB -->
         <div class="tab-content active" id="m-sport-tab">
             <div class="package-header">
-                <h2>M Sport Package - Standard Equipment</h2>
-                <p class="package-description">Core features included with the M Sport variant</p>
+                <h2>M Sport Package - Standard Equipment (2020 Model)</h2>
+                <p class="package-description">Core M Sport features included with the 2020 330e M Sport variant</p>
             </div>
 
             <div class="checklist-section">
-                <h3>Wheels & Exterior</h3>
+                <h3>Exterior M Sport Features</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
                         <input type="checkbox" id="msportWheels" data-package="m-sport" data-importance="high">
                         <label for="msportWheels">
-                            <span class="item-title">18" 848 M Light Double-spoke Bicolour Alloy Wheels</span>
-                            <span class="item-notes">Signature M Sport wheel design</span>
+                            <span class="item-title">18" M Light Alloy Double-spoke Wheels (Style 791M)</span>
+                            <span class="item-notes">Bicolour orbit grey with mixed tyres</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
@@ -80,7 +150,7 @@
                         <input type="checkbox" id="msportShadowline" data-package="m-sport" data-importance="high">
                         <label for="msportShadowline">
                             <span class="item-title">High-gloss Shadowline Exterior Trim</span>
-                            <span class="item-notes">Black window surrounds and grille</span>
+                            <span class="item-notes">Black window surrounds and kidney grille</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
@@ -88,23 +158,31 @@
                         <input type="checkbox" id="msportBodykit" data-package="m-sport" data-importance="high">
                         <label for="msportBodykit">
                             <span class="item-title">M Aerodynamics Package</span>
-                            <span class="item-notes">Sportier front and rear bumpers</span>
+                            <span class="item-notes">Specific front and rear bumpers, side sills</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="msportMirrors" data-package="m-sport" data-importance="medium">
                         <label for="msportMirrors">
-                            <span class="item-title">Folding Wing Mirrors with Auto-dimming</span>
+                            <span class="item-title">Folding Exterior Mirrors</span>
                             <span class="item-notes">Electrically folding and heated</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="msportLEDLights" data-package="m-sport" data-importance="high">
+                        <label for="msportLEDLights">
+                            <span class="item-title">LED Headlights and Rear Lights</span>
+                            <span class="item-notes">Standard LED lighting package</span>
+                        </label>
+                        <span class="importance-badge high">Standard</span>
                     </div>
                 </div>
             </div>
 
             <div class="checklist-section">
-                <h3>Interior & Upholstery</h3>
+                <h3>Interior M Sport Features</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
                         <input type="checkbox" id="msportSteering" data-package="m-sport" data-importance="high">
@@ -118,29 +196,29 @@
                         <input type="checkbox" id="msportSeats" data-package="m-sport" data-importance="high">
                         <label for="msportSeats">
                             <span class="item-title">Front Sport Seats</span>
-                            <span class="item-notes">Enhanced side bolstering</span>
+                            <span class="item-notes">Enhanced side bolstering and M-specific design</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="msportUpholstery" data-package="m-sport" data-importance="high">
                         <label for="msportUpholstery">
-                            <span class="item-title">M PerformTex Black Cloth with M Piping</span>
-                            <span class="item-notes">Sport upholstery with contrast stitching</span>
+                            <span class="item-title">SensaTec Upholstery</span>
+                            <span class="item-notes">Standard leatherette upholstery</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="msportTrim" data-package="m-sport" data-importance="medium">
-                        <label for="msportTrim">
+                        <input type="checkbox" id="msportInteriorTrim" data-package="m-sport" data-importance="medium">
+                        <label for="msportInteriorTrim">
                             <span class="item-title">Aluminium Rhombicle Interior Trim</span>
                             <span class="item-notes">Diamond-pattern aluminium finish</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="msportHeadlining" data-package="m-sport" data-importance="medium">
-                        <label for="msportHeadlining">
+                        <input type="checkbox" id="msportAnthracite" data-package="m-sport" data-importance="medium">
+                        <label for="msportAnthracite">
                             <span class="item-title">Anthracite Headlining</span>
                             <span class="item-notes">Dark roof lining</span>
                         </label>
@@ -150,76 +228,139 @@
             </div>
 
             <div class="checklist-section">
-                <h3>Comfort & Convenience</h3>
+                <h3>M Sport Chassis & Driving</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
-                        <input type="checkbox" id="msportAircon" data-package="m-sport" data-importance="high">
-                        <label for="msportAircon">
-                            <span class="item-title">Automatic Air Conditioning</span>
-                            <span class="item-notes">2-zone climate control</span>
+                        <input type="checkbox" id="msportSuspension" data-package="m-sport" data-importance="high">
+                        <label for="msportSuspension">
+                            <span class="item-title">M Sport Suspension</span>
+                            <span class="item-notes">Lowered and sport-tuned suspension</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="msportHeatedSeats" data-package="m-sport" data-importance="high">
-                        <label for="msportHeatedSeats">
-                            <span class="item-title">Front Heated Seats</span>
-                        </label>
-                        <span class="importance-badge high">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="msportSeatAdjust" data-package="m-sport" data-importance="medium">
-                        <label for="msportSeatAdjust">
-                            <span class="item-title">Driver Seat Backrest Width Adjustment</span>
-                            <span class="item-notes">Lumbar and side bolster adjustment</span>
+                        <input type="checkbox" id="msportPaddles" data-package="m-sport" data-importance="medium">
+                        <label for="msportPaddles">
+                            <span class="item-title">Steptronic Paddle Shifters</span>
+                            <span class="item-notes">Aluminium paddle shifters behind steering wheel</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="msportRearSeats" data-package="m-sport" data-importance="medium">
-                        <label for="msportRearSeats">
-                            <span class="item-title">Split Folding Rear Seats</span>
-                            <span class="item-notes">40/20/40 split folding</span>
-                        </label>
-                        <span class="importance-badge medium">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="msportHeadrests" data-package="m-sport" data-importance="low">
-                        <label for="msportHeadrests">
-                            <span class="item-title">Rear Folding Headrests</span>
-                        </label>
-                        <span class="importance-badge low">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="msportStorage" data-package="m-sport" data-importance="low">
-                        <label for="msportStorage">
-                            <span class="item-title">Extended Storage</span>
-                            <span class="item-notes">Additional storage compartments</span>
-                        </label>
-                        <span class="importance-badge low">Standard</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- OPTIONAL PACKAGES TAB -->
-        <div class="tab-content" id="packages-tab">
+        <div class="tab-content" id="optional-packs-tab">
+            <div class="package-header">
+                <h2>Optional Packages (2020 Model Year)</h2>
+                <p class="package-description">Available factory-installed option packages for 2020 330e M Sport</p>
+            </div>
+
             <div class="checklist-section">
-                <h3>Executive Package (ZPX)</h3>
+                <h3>Comfort Pack (2020)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="comfortAutoTailgate" data-package="comfort" data-importance="high">
+                        <label for="comfortAutoTailgate">
+                            <span class="item-title">Automatic Tailgate Operation</span>
+                            <span class="item-notes">Powered boot lid with smart opener</span>
+                        </label>
+                        <span class="importance-badge high">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="comfortAccess" data-package="comfort" data-importance="high">
+                        <label for="comfortAccess">
+                            <span class="item-title">Comfort Access System</span>
+                            <span class="item-notes">Keyless entry and engine start</span>
+                        </label>
+                        <span class="importance-badge high">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="comfortLumbar" data-package="comfort" data-importance="medium">
+                        <label for="comfortLumbar">
+                            <span class="item-title">Front Lumbar Support</span>
+                            <span class="item-notes">Adjustable lumbar in front seats</span>
+                        </label>
+                        <span class="importance-badge medium">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="comfortAmbient" data-package="comfort" data-importance="medium">
+                        <label for="comfortAmbient">
+                            <span class="item-title">Ambient Lighting</span>
+                            <span class="item-notes">Multi-color interior ambient lighting</span>
+                        </label>
+                        <span class="importance-badge medium">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="comfortWireless" data-package="comfort" data-importance="low">
+                        <label for="comfortWireless">
+                            <span class="item-title">Wireless Charging</span>
+                            <span class="item-notes">Enhanced Bluetooth with wireless charging</span>
+                        </label>
+                        <span class="importance-badge low">Optional</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3>Technology Pack (2020)</h3>
+                <div class="checklist-items">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techDrivingAssistant" data-package="technology"
+                            data-importance="high">
+                        <label for="techDrivingAssistant">
+                            <span class="item-title">Driving Assistant</span>
+                            <span class="item-notes">Lane departure warning, speed limit info, city collision
+                                mitigation</span>
+                        </label>
+                        <span class="importance-badge high">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techLiveCockpitPro" data-package="technology" data-importance="high">
+                        <label for="techLiveCockpitPro">
+                            <span class="item-title">Live Cockpit Professional</span>
+                            <span class="item-notes">12.3" digital cluster + 10.25" central display with
+                                navigation</span>
+                        </label>
+                        <span class="importance-badge high">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techParkingAssistant" data-package="technology"
+                            data-importance="medium">
+                        <label for="techParkingAssistant">
+                            <span class="item-title">Parking Assistant Plus</span>
+                            <span class="item-notes">360° cameras, park assist, reversing assistant</span>
+                        </label>
+                        <span class="importance-badge medium">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techHeadUp" data-package="technology" data-importance="high">
+                        <label for="techHeadUp">
+                            <span class="item-title">Head-up Display</span>
+                            <span class="item-notes">Colour projection on windshield</span>
+                        </label>
+                        <span class="importance-badge high">Optional</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-section">
+                <h3>Executive Pack (2020)</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
                         <input type="checkbox" id="execAdaptiveLED" data-package="executive" data-importance="high">
                         <label for="execAdaptiveLED">
-                            <span class="item-title">Adaptive Full LED Headlights with Cornering</span>
-                            <span class="item-notes">Look for blue-ish inner rings in headlights</span>
+                            <span class="item-title">Adaptive LED Headlights</span>
+                            <span class="item-notes">With cornering function and high beam assist</span>
                         </label>
                         <span class="importance-badge high">Optional</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="execHarmanKardon" data-package="executive" data-importance="high">
                         <label for="execHarmanKardon">
-                            <span class="item-title">Harman Kardon Surround Sound System</span>
-                            <span class="item-notes">Check for metallic speaker grilles with branding</span>
+                            <span class="item-title">Harman Kardon Sound System</span>
+                            <span class="item-notes">Premium audio system with 16 speakers</span>
                         </label>
                         <span class="importance-badge high">Optional</span>
                     </div>
@@ -228,109 +369,15 @@
                             data-importance="medium">
                         <label for="execHeatedSteering">
                             <span class="item-title">Heated Steering Wheel</span>
-                            <span class="item-notes">Look for heating button on lower steering wheel spoke</span>
+                            <span class="item-notes">Quick heating function</span>
                         </label>
                         <span class="importance-badge medium">Optional</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="execWirelessCharging" data-package="executive" data-importance="low">
-                        <label for="execWirelessCharging">
-                            <span class="item-title">Wireless Charging</span>
-                        </label>
-                        <span class="importance-badge low">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="execWiFiHotspot" data-package="executive" data-importance="low">
-                        <label for="execWiFiHotspot">
-                            <span class="item-title">WiFi Hotspot</span>
-                        </label>
-                        <span class="importance-badge low">Optional</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="checklist-section">
-                <h3>Premium Package (ZPP)</h3>
-                <div class="checklist-items">
-                    <div class="checklist-item">
-                        <input type="checkbox" id="premHeadUpDisplay" data-package="premium" data-importance="high">
-                        <label for="premHeadUpDisplay">
-                            <span class="item-title">Head-Up Display (HUD)</span>
-                            <span class="item-notes">Look for recessed panel on dashboard</span>
-                        </label>
-                        <span class="importance-badge high">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="premComfortAccess" data-package="premium" data-importance="high">
-                        <label for="premComfortAccess">
-                            <span class="item-title">Comfort Access (Keyless Entry)</span>
-                            <span class="item-notes">Check for ridged lines on door handles</span>
-                        </label>
-                        <span class="importance-badge high">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="premLiveCockpitPro" data-package="premium" data-importance="medium">
-                        <label for="premLiveCockpitPro">
-                            <span class="item-title">Live Cockpit Pro (Navigation)</span>
-                            <span class="item-notes">10.25" widescreen vs standard 8.8"</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="premLumbarSupport" data-package="premium" data-importance="medium">
-                        <label for="premLumbarSupport">
-                            <span class="item-title">Lumbar Support</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="checklist-section">
-                <h3>Driving Assistance Package (ZDP)</h3>
-                <div class="checklist-items">
-                    <div class="checklist-item">
-                        <input type="checkbox" id="driveAssistActiveCruise" data-package="driving"
-                            data-importance="high">
-                        <label for="driveAssistActiveCruise">
-                            <span class="item-title">Active Cruise Control with Stop & Go</span>
-                            <span class="item-notes">Look for radar sensor in lower front bumper</span>
-                        </label>
-                        <span class="importance-badge high">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="driveAssistLaneKeep" data-package="driving" data-importance="medium">
-                        <label for="driveAssistLaneKeep">
-                            <span class="item-title">Lane Keeping Assist</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="driveAssistBlindSpot" data-package="driving"
-                            data-importance="medium">
-                        <label for="driveAssistBlindSpot">
-                            <span class="item-title">Active Blind Spot Detection</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="checklist-section">
-                <h3>Parking Assistance Package (ZPK)</h3>
-                <div class="checklist-items">
-                    <div class="checklist-item">
-                        <input type="checkbox" id="parkSurroundView" data-package="parking" data-importance="medium">
-                        <label for="parkSurroundView">
-                            <span class="item-title">Surround View 3D Cameras</span>
-                            <span class="item-notes">Look for cameras under side mirrors</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="parkReversingAssistant" data-package="parking" data-importance="low">
-                        <label for="parkReversingAssistant">
-                            <span class="item-title">Reversing Assistant</span>
+                        <input type="checkbox" id="execSunProtection" data-package="executive" data-importance="low">
+                        <label for="execSunProtection">
+                            <span class="item-title">Sun Protection Glass</span>
+                            <span class="item-notes">Enhanced privacy and UV protection</span>
                         </label>
                         <span class="importance-badge low">Optional</span>
                     </div>
@@ -341,51 +388,47 @@
         <!-- EXTERIOR TAB -->
         <div class="tab-content" id="exterior-tab">
             <div class="checklist-section">
-                <h3>Exterior Features & Options</h3>
+                <h3>Exterior Options & Features</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
-                        <input type="checkbox" id="extAdaptiveSuspension" data-importance="high">
-                        <label for="extAdaptiveSuspension">
-                            <span class="item-title">Adaptive M Suspension</span>
-                            <span class="item-notes">Check if "Chassis & Steering" appears in Sport mode settings</span>
+                        <input type="checkbox" id="extMetallicPaint" data-importance="medium">
+                        <label for="extMetallicPaint">
+                            <span class="item-title">Metallic Paint</span>
+                            <span class="item-notes">Upgrade from standard solid paint</span>
+                        </label>
+                        <span class="importance-badge medium">Optional</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="ext19InchWheels" data-importance="high">
+                        <label for="ext19InchWheels">
+                            <span class="item-title">19" M Light Alloy Wheels</span>
+                            <span class="item-notes">Various styles available as upgrade</span>
                         </label>
                         <span class="importance-badge high">Optional</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="extMSportBrakes" data-importance="high">
                         <label for="extMSportBrakes">
-                            <span class="item-title">M Sport Brakes with Blue Calipers</span>
+                            <span class="item-title">M Sport Brakes</span>
+                            <span class="item-notes">Blue calipers with M branding</span>
                         </label>
                         <span class="importance-badge high">Optional</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="ext19InchWheels" data-importance="medium">
-                        <label for="ext19InchWheels">
-                            <span class="item-title">19-inch M Wheels</span>
-                            <span class="item-notes">Upgrade from standard 18"</span>
+                        <input type="checkbox" id="extPanoramicRoof" data-importance="medium">
+                        <label for="extPanoramicRoof">
+                            <span class="item-title">Panoramic Glass Sunroof</span>
+                            <span class="item-notes">Electric sliding/tilting glass roof</span>
                         </label>
                         <span class="importance-badge medium">Optional</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="extPowerTailgate" data-importance="medium">
-                        <label for="extPowerTailgate">
-                            <span class="item-title">Power Tailgate</span>
+                        <input type="checkbox" id="extAdaptiveSuspension" data-importance="high">
+                        <label for="extAdaptiveSuspension">
+                            <span class="item-title">Adaptive M Suspension</span>
+                            <span class="item-notes">Electronic damping control</span>
                         </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="extSunroof" data-importance="medium">
-                        <label for="extSunroof">
-                            <span class="item-title">Panoramic Sunroof</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="extMetallicPaint" data-importance="low">
-                        <label for="extMetallicPaint">
-                            <span class="item-title">Metallic Paint</span>
-                        </label>
-                        <span class="importance-badge low">Optional</span>
+                        <span class="importance-badge high">Optional</span>
                     </div>
                 </div>
             </div>
@@ -394,38 +437,47 @@
         <!-- INTERIOR TAB -->
         <div class="tab-content" id="interior-tab">
             <div class="checklist-section">
-                <h3>Interior Features & Options</h3>
+                <h3>Interior Options & Features</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
                         <input type="checkbox" id="intVernascaLeather" data-importance="high">
                         <label for="intVernascaLeather">
                             <span class="item-title">Vernasca Leather Upholstery</span>
-                            <span class="item-notes">Upgrade from standard PerformTex</span>
+                            <span class="item-notes">Upgrade from SensaTec</span>
                         </label>
                         <span class="importance-badge high">Optional</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="intAmbientLighting" data-importance="medium">
-                        <label for="intAmbientLighting">
-                            <span class="item-title">Ambient Lighting</span>
-                            <span class="item-notes">Multi-color interior lighting</span>
+                        <input type="checkbox" id="intHeatedSeats" data-importance="high">
+                        <label for="intHeatedSeats">
+                            <span class="item-title">Heated Front Seats</span>
+                            <span class="item-notes">3-stage heating for driver and passenger</span>
                         </label>
-                        <span class="importance-badge medium">Optional</span>
+                        <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="intMemorySeats" data-importance="medium">
                         <label for="intMemorySeats">
                             <span class="item-title">Electric Seat Memory</span>
-                            <span class="item-notes">Driver seat and mirror memory</span>
+                            <span class="item-notes">Driver seat and mirror memory function</span>
                         </label>
                         <span class="importance-badge medium">Optional</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="intRearHeated" data-importance="low">
-                        <label for="intRearHeated">
-                            <span class="item-title">Rear Heated Seats</span>
+                        <input type="checkbox" id="intSplitRear" data-importance="medium">
+                        <label for="intSplitRear">
+                            <span class="item-title">Split Folding Rear Seats</span>
+                            <span class="item-notes">40/20/40 split with through-loading</span>
                         </label>
-                        <span class="importance-badge low">Optional</span>
+                        <span class="importance-badge medium">Standard</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="intExtendedStorage" data-importance="low">
+                        <label for="intExtendedStorage">
+                            <span class="item-title">Extended Storage</span>
+                            <span class="item-notes">Additional interior storage options</span>
+                        </label>
+                        <span class="importance-badge low">Standard</span>
                     </div>
                 </div>
             </div>
@@ -439,23 +491,16 @@
                     <div class="checklist-item">
                         <input type="checkbox" id="techLiveCockpitPlus" data-importance="high">
                         <label for="techLiveCockpitPlus">
-                            <span class="item-title">Live Cockpit Plus</span>
-                            <span class="item-notes">Standard digital instrument cluster</span>
+                            <span class="item-title">Live Cockpit Plus (Standard)</span>
+                            <span class="item-notes">8.8" central display with navigation</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="techWidescreen" data-importance="high">
-                        <label for="techWidescreen">
-                            <span class="item-title">Widescreen Display</span>
-                            <span class="item-notes">Central information display</span>
-                        </label>
-                        <span class="importance-badge high">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="techOnlineServices" data-importance="medium">
-                        <label for="techOnlineServices">
+                        <input type="checkbox" id="techBMWOnline" data-importance="medium">
+                        <label for="techBMWOnline">
                             <span class="item-title">BMW Online Services</span>
+                            <span class="item-notes">Real-time traffic info, concierge services</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
@@ -463,27 +508,15 @@
                         <input type="checkbox" id="techTeleservices" data-importance="medium">
                         <label for="techTeleservices">
                             <span class="item-title">BMW TeleServices</span>
+                            <span class="item-notes">Automatic service requirement notification</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
                     <div class="checklist-item">
-                        <input type="checkbox" id="techConnectedPro" data-importance="medium">
-                        <label for="techConnectedPro">
+                        <input type="checkbox" id="techConnectedPackage" data-importance="medium">
+                        <label for="techConnectedPackage">
                             <span class="item-title">Connected Package Professional</span>
-                        </label>
-                        <span class="importance-badge medium">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="techPersonalESIM" data-importance="medium">
-                        <label for="techPersonalESIM">
-                            <span class="item-title">Personal eSIM</span>
-                        </label>
-                        <span class="importance-badge medium">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="techDAB" data-importance="medium">
-                        <label for="techDAB">
-                            <span class="item-title">DAB Radio</span>
+                            <span class="item-notes">Remote services, real-time traffic</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
@@ -491,9 +524,25 @@
                         <input type="checkbox" id="techAppleCarPlay" data-importance="medium">
                         <label for="techAppleCarPlay">
                             <span class="item-title">Apple CarPlay Preparation</span>
-                            <span class="item-notes">Wireless Apple CarPlay</span>
+                            <span class="item-notes">Wireless Apple CarPlay integration</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techDAB" data-importance="medium">
+                        <label for="techDAB">
+                            <span class="item-title">DAB Digital Radio</span>
+                            <span class="item-notes">Digital audio broadcasting</span>
+                        </label>
+                        <span class="importance-badge medium">Standard</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="techGestureControl" data-importance="low">
+                        <label for="techGestureControl">
+                            <span class="item-title">Gesture Control</span>
+                            <span class="item-notes">Control functions with hand gestures</span>
+                        </label>
+                        <span class="importance-badge low">Optional</span>
                     </div>
                 </div>
             </div>
@@ -502,36 +551,29 @@
         <!-- MECHANICAL TAB -->
         <div class="tab-content" id="mechanical-tab">
             <div class="checklist-section">
-                <h3>Mechanical & Performance</h3>
+                <h3>Mechanical & Hybrid Features</h3>
                 <div class="checklist-items">
                     <div class="checklist-item">
                         <input type="checkbox" id="mechXtraBoost" data-importance="high">
                         <label for="mechXtraBoost">
                             <span class="item-title">XtraBoost Function</span>
-                            <span class="item-notes">Check for XtraBoost button in center console</span>
+                            <span class="item-notes">288 hp total system power for 10 seconds</span>
                         </label>
                         <span class="importance-badge high">Standard</span>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" id="mechMSportDiff" data-importance="medium">
-                        <label for="mechMSportDiff">
-                            <span class="item-title">M Sport Differential</span>
-                            <span class="item-notes">Limited-slip rear differential</span>
-                        </label>
-                        <span class="importance-badge medium">Optional</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="mechDrivingModes" data-importance="medium">
                         <label for="mechDrivingModes">
                             <span class="item-title">Driving Experience Control</span>
-                            <span class="item-notes">ELECTRIC, HYBRID, SPORT, and ADAPTIVE modes</span>
+                            <span class="item-notes">ELECTRIC, HYBRID, SPORT, ADAPTIVE modes</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
                     <div class="checklist-item">
                         <input type="checkbox" id="mechChargingCable" data-importance="medium">
                         <label for="mechChargingCable">
-                            <span class="item-title">Charging cable Professional (Mode 3)</span>
+                            <span class="item-title">Charging Cable Professional</span>
+                            <span class="item-notes">Mode 3 charging cable included</span>
                         </label>
                         <span class="importance-badge medium">Standard</span>
                     </div>
@@ -542,6 +584,14 @@
                             <span class="item-notes">Acoustic pedestrian protection</span>
                         </label>
                         <span class="importance-badge low">Standard</span>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="mechMSportDiff" data-importance="medium">
+                        <label for="mechMSportDiff">
+                            <span class="item-title">M Sport Differential</span>
+                            <span class="item-notes">Limited-slip rear differential</span>
+                        </label>
+                        <span class="importance-badge medium">Optional</span>
                     </div>
                 </div>
             </div>
@@ -585,7 +635,41 @@
         </div>
     </div>
 
+    <!-- Sync Settings Modal -->
+    <div id="syncModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cloud Sync Settings</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="sync-options">
+                    <div class="sync-option">
+                        <h3>Google Drive Sync</h3>
+                        <p>Sync your car data to Google Drive for access across all devices</p>
+                        <button id="googleSyncBtn" class="btn-secondary">Connect Google Drive</button>
+                    </div>
+                    <div class="sync-option">
+                        <h3>Manual Backup/Restore</h3>
+                        <p>Export your data as a file and import on another device</p>
+                        <div class="sync-actions">
+                            <button id="exportBackupBtn" class="btn-secondary">Export Backup</button>
+                            <button id="importBackupBtn" class="btn-secondary">Import Backup</button>
+                        </div>
+                    </div>
+                    <div class="sync-option">
+                        <h3>QR Code Transfer</h3>
+                        <p>Generate a QR code to transfer data to mobile devices</p>
+                        <button id="qrCodeBtn" class="btn-secondary">Generate QR Code</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/minified/html5-qrcode.min.js"></script>
 </body>
 
 </html>
